@@ -1,20 +1,26 @@
 :root {
-  /* Palette tirée du logo GSD Authentic */
-  --color-ink: #141414;
-  --color-paper: #f1eee8;
-  --color-card: #e8e4dc;
-  --color-red: #c8102e;
-  --color-muted: #77746e;
-  --color-line: rgb(20 20 20 / 0.15);
+  color-scheme: dark;
 
-  /* Une seule famille, volontairement neutre : le logo porte le caractère */
-  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  /* Terminal underground : noir profond, vert phosphore, rouge GSD */
+  --color-bg: #060807;
+  --color-surface: #0c100e;
+  --color-card: #111613;
+  --color-text: #d6f5de;
+  --color-green: #39ff7a;
+  --color-green-dim: #1f8f47;
+  --color-red: #ff2a3d;
+  --color-muted: #6a8a74;
+  --color-line: rgb(57 255 122 / 0.16);
+  --color-line-strong: rgb(57 255 122 / 0.45);
+
+  /* Une seule famille : la mono système, comme un vrai terminal */
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
 
   --text-xs: 0.6875rem;
   --text-sm: 0.75rem;
   --text-base: 0.875rem;
-  --text-lg: clamp(1.25rem, 1rem + 1vw, 1.75rem);
-  --text-xl: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+  --text-lg: clamp(1.1rem, 0.9rem + 0.9vw, 1.5rem);
+  --text-xl: clamp(2rem, 1rem + 4vw, 4.5rem);
 
   --space-xs: 0.5rem;
   --space-sm: 1rem;
@@ -23,7 +29,10 @@
   --space-section: clamp(4rem, 3rem + 5vw, 8rem);
   --gutter: clamp(1rem, 2.5vw, 2rem);
 
-  --duration-fast: 150ms;
-  --duration-normal: 300ms;
+  --glow-green: 0 0 6px rgb(57 255 122 / 0.55);
+  --glow-red: 0 0 8px rgb(255 42 61 / 0.6);
+
+  --duration-fast: 120ms;
+  --duration-normal: 260ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Authentic Shits — Get Shit Done</title>
   <meta name="description" content="Authentic Shits. Get shit done. Drop 01 disponible, quantités limitées.">
-  <meta name="theme-color" content="#f1eee8">
+  <meta name="theme-color" content="#060807">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta property="og:title" content="Authentic Shits — Get Shit Done">
@@ -14,14 +14,20 @@
   <link rel="canonical" href="https://authenticshits.com/">
   <link rel="icon" href="img/logo-noir.png">
   <link rel="preload" as="image" href="img/triangle-noir.png">
-  <link rel="stylesheet" href="css/tokens.css?v=3">
-  <link rel="stylesheet" href="css/main.css?v=3">
-  <script type="module" src="js/app.js?v=3"></script>
+  <link rel="stylesheet" href="css/tokens.css?v=4">
+  <link rel="stylesheet" href="css/main.css?v=4">
+  <link rel="stylesheet" href="css/logo3d.css?v=4">
+  <script type="module" src="js/app.js?v=4"></script>
 </head>
 <body>
+  <div class="boot" data-boot hidden>
+    <span class="skip">[ clic pour passer ]</span>
+    <pre data-boot-log></pre>
+  </div>
+
   <a class="skip-link" href="#shop">Aller à la boutique</a>
 
-  <p class="announce">Get shit done — Drop 01 disponible — Livraison offerte dès 80 €</p>
+  <p class="announce caret">&gt; get_shit_done // drop_01 online // livraison offerte ≥ 80 €</p>
 
   <header class="site-header">
     <nav aria-label="Navigation principale">
@@ -57,8 +63,8 @@
   <main id="top">
     <section id="shop" class="shop" aria-labelledby="shop-title">
       <header class="shop-head">
-        <h1 id="shop-title">Drop 01</h1>
-        <p>Quantités limitées. Pas de restock.</p>
+        <h1 id="shop-title" class="prompt">ls ./drop_01</h1>
+        <p>8 fichiers // stock limité // no restock</p>
       </header>
       <ul class="product-grid" data-product-grid></ul>
     </section>
@@ -67,19 +73,20 @@
       <img class="about-poster" src="img/get-shit-done.png" alt="Get your fckin shit done" width="900" height="1046" loading="lazy">
       <div class="about-text">
         <h2 id="about-title">Authentic Shits</h2>
-        <p>Pas de hype, pas de fake. Des pièces lourdes, bien coupées, faites pour ceux qui avancent.</p>
-        <p>Le triangle GSD, c'est la règle : <strong>Get. Shit. Done.</strong> Le reste, c'est du bruit.</p>
-        <p class="about-sign">— AS</p>
+        <p class="log">Pas de hype. Pas de fake. Pas de pub.</p>
+        <p class="log">Des pièces lourdes, bien coupées, faites pour ceux qui avancent dans l'ombre.</p>
+        <p class="log">Le triangle GSD, c'est la seule règle : <strong>Get. Shit. Done.</strong></p>
+        <p class="about-sign caret">— AS // fin de transmission</p>
       </div>
     </section>
 
     <section id="club" class="club" aria-labelledby="club-title">
-      <h2 id="club-title">Le club</h2>
-      <p>Accès au prochain drop avant tout le monde.</p>
+      <h2 id="club-title">// Le réseau</h2>
+      <p>Accès au prochain drop avant tout le monde. Chiffré. Discret.</p>
       <form class="club-form" data-newsletter novalidate>
         <label for="email" class="sr-only">Adresse e-mail</label>
-        <input id="email" name="email" type="email" autocomplete="email" placeholder="E-mail" required>
-        <button type="submit">S'inscrire</button>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="ton@email" required>
+        <button type="submit">[ connect ]</button>
         <p class="form-msg" role="status" data-newsletter-msg></p>
       </form>
     </section>
@@ -92,7 +99,8 @@
       <li><a href="#" aria-disabled="true">CGV</a></li>
       <li><a href="#" aria-disabled="true">Contact</a></li>
     </ul>
-    <p>© <span data-year></span> Authentic Shits</p>
+    <p class="status">connexion sécurisée</p>
+    <p>© <span data-year></span> Authentic Shits // all rights reserved</p>
   </footer>
 
   <!-- Fiche produit -->
@@ -118,7 +126,7 @@
       <button class="text-btn" type="button" data-cart-close aria-label="Fermer le panier">Fermer ✕</button>
     </div>
     <ul class="cart-lines" data-cart-lines></ul>
-    <p class="cart-empty" data-cart-empty>Ton bag est vide.</p>
+    <p class="cart-empty" data-cart-empty>bag vide. rien à exfiltrer.</p>
     <div class="cart-foot">
       <p class="cart-total"><span>Sous-total</span> <strong data-cart-total>0 €</strong></p>
       <p class="muted">Livraison offerte dès 80 €.</p>

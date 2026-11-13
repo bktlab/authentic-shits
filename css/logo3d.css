@@ -1,0 +1,60 @@
+/* ---------- Triangle GSD 3D qui tourne (logo du header) ---------- */
+/* 23 couleurs : une par demi-tour, changée quand le triangle est de profil. */
+@property --gsd-color { syntax: '<color>'; inherits: true; initial-value: #f1eee8; }
+.logo { display: block; perspective: 420px; }
+.gsd3d {
+  position: relative; display: block;
+  width: clamp(60px, 6.5vw, 84px); aspect-ratio: 640 / 432;
+  transform-style: preserve-3d;
+  animation:
+    gsd-turn 3s linear infinite,
+    gsd-colors 69s step-end infinite;
+}
+.gsd3d > span {
+  position: absolute; inset: 0;
+  -webkit-mask: url(../img/triangle-noir.png) center / contain no-repeat;
+  mask: url(../img/triangle-noir.png) center / contain no-repeat;
+  /* tranches internes plus sombres = la tranche du volume */
+  background: color-mix(in srgb, var(--gsd-color) 62%, #000);
+  box-shadow: none;
+}
+.gsd3d > span:first-child { background: var(--gsd-color); }
+.gsd3d > span:nth-child(2) { transform: translateZ(-1px); }
+.gsd3d > span:nth-child(3) { transform: translateZ(-2px); }
+.gsd3d > span:nth-child(4) { transform: translateZ(-3px); }
+.gsd3d > span:nth-child(5) { transform: translateZ(-4px); }
+.gsd3d > span:nth-child(6) { transform: translateZ(-5px); }
+.gsd3d > span:nth-child(7) { transform: translateZ(-6px); }
+.gsd3d > span:nth-child(8) { transform: translateZ(-7px); }
+.gsd3d > span:nth-child(9) { transform: translateZ(-8px); }
+.gsd3d > span:nth-child(10) { transform: translateZ(-9px); }
+.gsd3d > span:nth-child(11) { transform: translateZ(-10px); }
+.gsd3d > span:nth-child(12) { transform: translateZ(-11px); }
+.gsd3d > span:nth-child(13) { transform: translateZ(-12px); }
+.gsd3d > span:nth-child(14) { transform: translateZ(-13px); }
+@keyframes gsd-turn { from { transform: rotateY(-90deg); } to { transform: rotateY(90deg); } }
+@keyframes gsd-colors {
+  0.0000% { --gsd-color: #f1eee8; }
+  4.3478% { --gsd-color: #c8102e; }
+  8.6957% { --gsd-color: #ff1f8f; }
+  13.0435% { --gsd-color: #e6ff2a; }
+  17.3913% { --gsd-color: #9b6bff; }
+  21.7391% { --gsd-color: #2453db; }
+  26.0870% { --gsd-color: #39ff7a; }
+  30.4348% { --gsd-color: #ff5252; }
+  34.7826% { --gsd-color: #c4501f; }
+  39.1304% { --gsd-color: #f5b81f; }
+  43.4783% { --gsd-color: #00a19a; }
+  47.8261% { --gsd-color: #3d5afe; }
+  52.1739% { --gsd-color: #8a8d90; }
+  56.5217% { --gsd-color: #ff6a13; }
+  60.8696% { --gsd-color: #7fd3f7; }
+  65.2174% { --gsd-color: #b5e61d; }
+  69.5652% { --gsd-color: #d18b47; }
+  73.9130% { --gsd-color: #c9a0dc; }
+  78.2609% { --gsd-color: #ff8fab; }
+  82.6087% { --gsd-color: #a7ffeb; }
+  86.9565% { --gsd-color: #00c853; }
+  91.3043% { --gsd-color: #b87333; }
+  95.6522% { --gsd-color: #e040fb; }
+}

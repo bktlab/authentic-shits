@@ -3,6 +3,7 @@ import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './car
 import { garmentSvg } from './garment.js';
 import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js';
 import { buildShopifyCheckoutUrl } from './shopify.js';
+import { runBoot } from './boot.js';
 
 const TOAST_MS = 2200;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -182,12 +183,12 @@ function handleNewsletter(event) {
   const isValid = EMAIL_RE.test(email);
   msg.classList.toggle('is-error', !isValid);
   if (!isValid) {
-    msg.textContent = 'Mets une vraie adresse e-mail.';
+    msg.textContent = 'erreur : adresse e-mail invalide.';
     form.email.focus();
     return;
   }
   // À brancher sur ton outil d'e-mailing (Brevo, Mailchimp, Klaviyo…).
-  msg.textContent = 'T\'es dans le club ✶ (démo : rien n\'est encore envoyé)';
+  msg.textContent = 'connexion établie. t\'es dans le réseau. (démo : rien n\'est encore envoyé)';
   form.reset();
 }
 
@@ -230,6 +231,7 @@ function bindEvents() {
 }
 
 $('[data-year]').textContent = String(new Date().getFullYear());
+runBoot();
 renderProducts();
 renderCart();
 bindEvents();
