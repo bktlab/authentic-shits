@@ -1,7 +1,7 @@
 // Page d'entrée avec code d'accès.
 // Mise en scène de drop privé : le code est vérifié dans le navigateur via son empreinte SHA-256.
 // Ce n'est pas une vraie protection (le site reste techniquement accessible), juste un filtre d'entrée.
-import { ACCESS_CODE_SHA256 } from './config.js?v=13';
+import { ACCESS_CODE_SHA256 } from './config.js?v=14';
 
 const STORAGE_KEY = 'as-access';
 const FADE_MS = 450;
@@ -36,6 +36,23 @@ function setPageInert(isInert) {
   document.body.classList.toggle('is-locked', isInert);
 }
 
+// Compteur façon magnétoscope : 0:00:00 qui défile pendant que l'écran est affiché.
+function startCounter(gate) {
+  const el = gate.querySelector('[data-vhs-time]');
+  if (!el) return () => {};
+  const startedAt = Date.now();
+  const tick = () => {
+    const total = Math.floor((Date.now() - startedAt) / 1000);
+    const h = Math.floor(total / 3600);
+    const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
+    const sec = String(total % 60).padStart(2, '0');
+    el.textContent = `${h}:${m}:${sec}`;
+  };
+  tick();
+  const id = setInterval(tick, 1000);
+  return () => clearInterval(id);
+}
+
 function unlock(gate) {
   setPageInert(false);
   gate.classList.add('is-open');
@@ -55,6 +72,7 @@ export function initGate() {
   }
 
   setPageInert(true);
+  const stopCounter = startCounter(gate);
   const form = gate.querySelector('[data-gate-form]');
   const input = gate.querySelector('[data-gate-input]');
   const msg = gate.querySelector('[data-gate-msg]');
@@ -72,6 +90,7 @@ export function initGate() {
       msg.textContent = 'Access granted.';
       msg.classList.add('is-ok');
       storeAccess();
+      stopCounter();
       unlock(gate);
       return;
     }

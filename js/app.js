@@ -1,9 +1,9 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=13';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=13';
-import { productVisual } from './garment.js?v=13';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=13';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=13';
-import { initGate } from './gate.js?v=13';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=14';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=14';
+import { productVisual } from './garment.js?v=14';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=14';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=14';
+import { initGate } from './gate.js?v=14';
 
 const TOAST_MS = 2200;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
