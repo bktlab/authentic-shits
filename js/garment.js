@@ -31,7 +31,7 @@ export function garmentSvg(product, label = '') {
   const aria = label ? `role="img" aria-label="${escapeAttr(label)}"` : 'aria-hidden="true"';
   return `
     <svg viewBox="0 0 200 200" ${aria} class="garment">
-      <g fill="${escapeAttr(product.color)}" stroke="rgb(214 245 222 / 0.28)" stroke-width="1" stroke-linejoin="round">${shape}</g>
+      <g fill="${escapeAttr(product.color)}" stroke="rgb(200 200 196 / 0.25)" stroke-width="1" stroke-linejoin="round">${shape}</g>
       <image href="img/logo-${escapeAttr(product.logo)}.png" x="${print.x}" y="${print.y}"
         width="${print.w}" height="${(print.w * LOGO_RATIO).toFixed(1)}" preserveAspectRatio="xMidYMid meet"/>
     </svg>`;

@@ -1,38 +1,39 @@
 :root {
   color-scheme: dark;
 
-  /* Terminal underground : noir profond, vert phosphore, rouge GSD */
-  --color-bg: #060807;
-  --color-surface: #0c100e;
-  --color-card: #111613;
-  --color-text: #d6f5de;
-  --color-green: #39ff7a;
-  --color-green-dim: #1f8f47;
-  --color-red: #ff2a3d;
-  --color-muted: #6a8a74;
-  --color-line: rgb(57 255 122 / 0.16);
-  --color-line-strong: rgb(57 255 122 / 0.45);
+  /* Market underground : gris charbon, utilitaire, peu d'accents */
+  --color-bg: #0e0e0e;
+  --color-surface: #151515;
+  --color-panel: #1b1b1b;
+  --color-card: #121212;
+  --color-text: #c8c8c4;
+  --color-strong: #ecece8;
+  --color-muted: #77776f;
+  --color-link: #9fb3c8;
+  --color-red: #b3122a;
+  --color-red-bright: #e0243f;
+  --color-ok: #6f9a5b;
+  --color-line: #2a2a2a;
+  --color-line-strong: #3a3a3a;
 
-  /* Une seule famille : la mono système, comme un vrai terminal */
-  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  /* Typo de vieux forum + mono pour les codes et les prix */
+  --font-body: Verdana, Tahoma, 'Segoe UI', sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
 
   --text-xs: 0.6875rem;
   --text-sm: 0.75rem;
-  --text-base: 0.875rem;
-  --text-lg: clamp(1.1rem, 0.9rem + 0.9vw, 1.5rem);
-  --text-xl: clamp(2rem, 1rem + 4vw, 4.5rem);
+  --text-base: 0.8125rem;
+  --text-lg: 1rem;
 
   --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: clamp(2rem, 1.5rem + 2vw, 3.5rem);
-  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
-  --gutter: clamp(1rem, 2.5vw, 2rem);
-
-  --glow-green: 0 0 6px rgb(57 255 122 / 0.55);
-  --glow-red: 0 0 8px rgb(255 42 61 / 0.6);
+  --space-sm: 0.875rem;
+  --space-md: 1.25rem;
+  --space-lg: clamp(1.75rem, 1.25rem + 2vw, 3rem);
+  --space-section: clamp(3rem, 2rem + 4vw, 6rem);
+  --gutter: clamp(0.875rem, 2.5vw, 2rem);
+  --radius: 2px;
 
   --duration-fast: 120ms;
-  --duration-normal: 260ms;
+  --duration-normal: 240ms;
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
 }

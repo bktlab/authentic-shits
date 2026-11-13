@@ -3,7 +3,6 @@ import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './car
 import { garmentSvg } from './garment.js';
 import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js';
 import { buildShopifyCheckoutUrl } from './shopify.js';
-import { runBoot } from './boot.js';
 
 const TOAST_MS = 2200;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,22 +14,53 @@ const escapeHtml = (text) =>
 let cart = loadCart();
 let currentProduct = null;
 
-/* ---------- Grille produits ---------- */
-function renderProducts() {
-  $('[data-product-grid]').innerHTML = PRODUCTS.map((product) => `
+/* ---------- Annonces produits ---------- */
+const CATEGORY_LABELS = Object.freeze({ all: 'Tout', hoodie: 'Hoodies', tee: 'T-shirts', cap: 'Casquettes' });
+
+const listingId = (product) =>
+  `GSD-${String(PRODUCTS.indexOf(product) + 1).padStart(4, '0')}`;
+
+function renderCategories(active) {
+  const counts = PRODUCTS.reduce((acc, p) => ({ ...acc, [p.kind]: (acc[p.kind] ?? 0) + 1 }), {});
+  $('[data-categories]').innerHTML = Object.entries(CATEGORY_LABELS).map(([key, label]) => `
+    <li>
+      <button type="button" data-filter="${key}" aria-pressed="${key === active}">
+        ${escapeHtml(label)} <span>(${key === 'all' ? PRODUCTS.length : counts[key] ?? 0})</span>
+      </button>
+    </li>`).join('');
+}
+
+function renderListing(product) {
+  const status = product.soldOut
+    ? '<span class="tag tag-out">Épuisé</span>'
+    : '<span class="tag tag-in">Disponible</span>';
+  return `
     <li>
       <button class="product-card ${product.soldOut ? 'is-sold-out' : ''}" type="button"
         data-open-product="${escapeHtml(product.id)}">
         <span class="card-visual">${garmentSvg(product)}</span>
         <span class="card-info">
-          <h3>${escapeHtml(product.name)}</h3>
-          <span class="card-color">${escapeHtml(product.colorName)}</span>
-          <span class="card-price ${product.soldOut ? 'is-sold-out' : ''}">
-            ${product.soldOut ? 'Sold out' : formatPrice(product.price)}
-          </span>
+          <span class="card-title">${escapeHtml(productTitle(product))}</span>
+          <span class="card-meta"><span>Annonce</span><span class="mono">#${listingId(product)}</span></span>
+          <span class="card-meta"><span>Vendeur</span><span>authentic_shits <span class="verified">✓</span></span></span>
+          <span class="card-meta"><span>Expédié de</span><span>FR → Monde</span></span>
+          <span class="card-meta"><span>Statut</span>${status}</span>
+          <span class="card-price mono">${formatPrice(product.price)}</span>
         </span>
       </button>
-    </li>`).join('');
+    </li>`;
+}
+
+function renderProducts(filter = 'all') {
+  const visible = filter === 'all' ? PRODUCTS : PRODUCTS.filter((p) => p.kind === filter);
+  $('[data-product-grid]').innerHTML = visible.map(renderListing).join('');
+  $('[data-result-count]').textContent = `${visible.length} annonce${visible.length > 1 ? 's' : ''}`;
+  renderCategories(filter);
+}
+
+function handleFilterClick(event) {
+  const button = event.target.closest('[data-filter]');
+  if (button && button.dataset.filter in CATEGORY_LABELS) renderProducts(button.dataset.filter);
 }
 
 /* ---------- Fiche produit ---------- */
@@ -183,12 +213,12 @@ function handleNewsletter(event) {
   const isValid = EMAIL_RE.test(email);
   msg.classList.toggle('is-error', !isValid);
   if (!isValid) {
-    msg.textContent = 'erreur : adresse e-mail invalide.';
+    msg.textContent = 'Adresse e-mail invalide.';
     form.email.focus();
     return;
   }
   // À brancher sur ton outil d'e-mailing (Brevo, Mailchimp, Klaviyo…).
-  msg.textContent = 'connexion établie. t\'es dans le réseau. (démo : rien n\'est encore envoyé)';
+  msg.textContent = 'Inscription enregistrée. (démo : rien n\'est encore envoyé)';
   form.reset();
 }
 
@@ -215,6 +245,7 @@ function bindEvents() {
     const card = event.target.closest('[data-open-product]');
     if (card) openProduct(card.dataset.openProduct);
   });
+  $('[data-categories]').addEventListener('click', handleFilterClick);
   $('[data-pd-sizes]').addEventListener('change', updateAddButton);
   $('[data-pd-add]').addEventListener('click', handleAddToCart);
   $('.cart-toggle').addEventListener('click', () => setCartOpen(true));
@@ -231,7 +262,6 @@ function bindEvents() {
 }
 
 $('[data-year]').textContent = String(new Date().getFullYear());
-runBoot();
 renderProducts();
 renderCart();
 bindEvents();
