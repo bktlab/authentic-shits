@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Authentic Shits — Get Shit Done</title>
+  <meta name="description" content="Authentic Shits. Get shit done. Drop 01 disponible, quantités limitées.">
+  <meta name="theme-color" content="#f1eee8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta property="og:title" content="Authentic Shits — Get Shit Done">
+  <meta property="og:description" content="Drop 01 disponible. Quantités limitées, pas de restock.">
+  <meta property="og:image" content="img/logo-noir.png">
+  <link rel="icon" href="img/logo-noir.png">
+  <link rel="preload" as="image" href="img/logo-noir.png">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script type="module" src="js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#shop">Aller à la boutique</a>
+
+  <p class="announce">Get shit done — Drop 01 disponible — Livraison offerte dès 80 €</p>
+
+  <header class="site-header">
+    <nav aria-label="Navigation principale">
+      <ul>
+        <li><a href="#shop">Shop</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#club">Club</a></li>
+      </ul>
+    </nav>
+    <a href="#top" class="logo" aria-label="Authentic Shits, accueil">
+      <img src="img/logo-noir.png" alt="" width="1000" height="722">
+    </a>
+    <button class="cart-toggle" type="button" aria-controls="cart" aria-expanded="false">
+      Bag (<span data-cart-count>0</span>)
+    </button>
+  </header>
+
+  <main id="top">
+    <section id="shop" class="shop" aria-labelledby="shop-title">
+      <header class="shop-head">
+        <h1 id="shop-title">Drop 01</h1>
+        <p>Quantités limitées. Pas de restock.</p>
+      </header>
+      <ul class="product-grid" data-product-grid></ul>
+    </section>
+
+    <section id="about" class="about" aria-labelledby="about-title">
+      <img class="about-poster" src="img/get-shit-done.png" alt="Get your fckin shit done" width="900" height="1046" loading="lazy">
+      <div class="about-text">
+        <h2 id="about-title">Authentic Shits</h2>
+        <p>Pas de hype, pas de fake. Des pièces lourdes, bien coupées, faites pour ceux qui avancent.</p>
+        <p>Le triangle GSD, c'est la règle : <strong>Get. Shit. Done.</strong> Le reste, c'est du bruit.</p>
+        <p class="about-sign">— AS</p>
+      </div>
+    </section>
+
+    <section id="club" class="club" aria-labelledby="club-title">
+      <h2 id="club-title">Le club</h2>
+      <p>Accès au prochain drop avant tout le monde.</p>
+      <form class="club-form" data-newsletter novalidate>
+        <label for="email" class="sr-only">Adresse e-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="E-mail" required>
+        <button type="submit">S'inscrire</button>
+        <p class="form-msg" role="status" data-newsletter-msg></p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <ul>
+      <li><a href="#" aria-disabled="true">Instagram</a></li>
+      <li><a href="#" aria-disabled="true">TikTok</a></li>
+      <li><a href="#" aria-disabled="true">CGV</a></li>
+      <li><a href="#" aria-disabled="true">Contact</a></li>
+    </ul>
+    <p>© <span data-year></span> Authentic Shits</p>
+  </footer>
+
+  <!-- Fiche produit -->
+  <dialog class="product-dialog" data-product-dialog aria-labelledby="pd-name">
+    <form method="dialog" class="dialog-close-form"><button class="text-btn" aria-label="Fermer">Fermer ✕</button></form>
+    <div class="pd-visual" data-pd-visual></div>
+    <div class="pd-body">
+      <h2 id="pd-name" data-pd-name></h2>
+      <p class="pd-price" data-pd-price></p>
+      <p class="pd-tagline" data-pd-tagline></p>
+      <fieldset class="size-picker">
+        <legend>Taille</legend>
+        <div class="sizes" data-pd-sizes></div>
+      </fieldset>
+      <button class="btn btn-block" type="button" data-pd-add>Ajouter au bag</button>
+    </div>
+  </dialog>
+
+  <!-- Panier -->
+  <aside id="cart" class="cart" aria-label="Panier" aria-hidden="true" inert>
+    <div class="cart-head">
+      <h2>Bag</h2>
+      <button class="text-btn" type="button" data-cart-close aria-label="Fermer le panier">Fermer ✕</button>
+    </div>
+    <ul class="cart-lines" data-cart-lines></ul>
+    <p class="cart-empty" data-cart-empty>Ton bag est vide.</p>
+    <div class="cart-foot">
+      <p class="cart-total"><span>Sous-total</span> <strong data-cart-total>0 €</strong></p>
+      <p class="muted">Livraison offerte dès 80 €.</p>
+      <button class="btn btn-block" type="button" data-checkout>Checkout</button>
+    </div>
+  </aside>
+  <div class="scrim" data-scrim hidden></div>
+
+  <!-- Récap commande (mode démo) -->
+  <dialog class="checkout-dialog" data-checkout-dialog aria-labelledby="co-title">
+    <h2 id="co-title">Récap commande</h2>
+    <div data-checkout-body></div>
+    <form method="dialog"><button class="btn btn-block">OK</button></form>
+  </dialog>
+
+  <p class="toast" role="status" aria-live="polite" data-toast></p>
+</body>
+</html>

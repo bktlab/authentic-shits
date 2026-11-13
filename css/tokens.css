@@ -1,0 +1,29 @@
+:root {
+  /* Palette tirée du logo GSD Authentic */
+  --color-ink: #141414;
+  --color-paper: #f1eee8;
+  --color-card: #e8e4dc;
+  --color-red: #c8102e;
+  --color-muted: #77746e;
+  --color-line: rgb(20 20 20 / 0.15);
+
+  /* Une seule famille, volontairement neutre : le logo porte le caractère */
+  --font-sans: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --text-xs: 0.6875rem;
+  --text-sm: 0.75rem;
+  --text-base: 0.875rem;
+  --text-lg: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  --text-xl: clamp(2rem, 1.2rem + 3vw, 3.5rem);
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: clamp(2rem, 1.5rem + 2vw, 3.5rem);
+  --space-section: clamp(4rem, 3rem + 5vw, 8rem);
+  --gutter: clamp(1rem, 2.5vw, 2rem);
+
+  --duration-fast: 150ms;
+  --duration-normal: 300ms;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
