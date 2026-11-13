@@ -1,6 +1,5 @@
-// Mockups produits en SVG avec le vrai logo imprimé dessus, en attendant les photos.
-// Quand tu auras tes photos : ajoute `image: 'img/mon-produit.webp'` au produit
-// et remplace l'appel à garmentSvg() par une balise <img>.
+// Visuel produit : la photo PNG détourée si elle existe (champ `image` du produit),
+// sinon un mockup SVG avec le vrai logo imprimé dessus.
 
 const SHAPES = {
   tee: '<path d="M62 34 L84 24 Q100 38 116 24 L138 34 L172 64 L152 86 L138 76 L138 178 L62 178 L62 76 L48 86 L28 64 Z"/>',
@@ -35,4 +34,16 @@ export function garmentSvg(product, label = '') {
       <image href="img/logo-${escapeAttr(product.logo)}.png" x="${print.x}" y="${print.y}"
         width="${print.w}" height="${(print.w * LOGO_RATIO).toFixed(1)}" preserveAspectRatio="xMidYMid meet"/>
     </svg>`;
+}
+
+/**
+ * Visuel d'un produit : photo PNG détourée si `product.image` est renseigné, sinon mockup SVG.
+ * @param {object} product
+ * @param {string} [label] texte alternatif ; vide = image décorative
+ * @returns {string}
+ */
+export function productVisual(product, label = '') {
+  if (!product.image) return garmentSvg(product, label);
+  return `<img class="garment garment-photo" src="${escapeAttr(product.image)}" alt="${escapeAttr(label)}"
+    width="800" height="800" loading="lazy" decoding="async">`;
 }

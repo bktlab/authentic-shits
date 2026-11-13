@@ -1,6 +1,6 @@
 import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js';
 import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js';
-import { garmentSvg } from './garment.js';
+import { productVisual } from './garment.js';
 import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js';
 import { buildShopifyCheckoutUrl } from './shopify.js';
 
@@ -38,7 +38,7 @@ function renderListing(product) {
     <li>
       <button class="product-card ${product.soldOut ? 'is-sold-out' : ''}" type="button"
         data-open-product="${escapeHtml(product.id)}">
-        <span class="card-visual">${garmentSvg(product)}</span>
+        <span class="card-visual">${productVisual(product)}</span>
         <span class="card-info">
           <span class="card-title">${escapeHtml(productTitle(product))}</span>
           <span class="card-meta"><span>Annonce</span><span class="mono">#${listingId(product)}</span></span>
@@ -70,7 +70,7 @@ function openProduct(id) {
   currentProduct = product;
   const isSingleSize = product.sizes.length === 1 && !product.soldOut;
 
-  $('[data-pd-visual]').innerHTML = garmentSvg(product, productTitle(product));
+  $('[data-pd-visual]').innerHTML = productVisual(product, productTitle(product));
   $('[data-pd-name]').textContent = productTitle(product);
   $('[data-pd-price]').textContent = formatPrice(product.price);
   $('[data-pd-tagline]').textContent = product.tagline;
@@ -129,7 +129,7 @@ function renderCartLine(line) {
   const key = `data-id="${escapeHtml(line.id)}" data-size="${escapeHtml(line.size)}"`;
   return `
     <li class="cart-line">
-      <span class="thumb">${garmentSvg(product)}</span>
+      <span class="thumb">${productVisual(product)}</span>
       <div>
         <h3>${escapeHtml(product.name)}</h3>
         <p>${escapeHtml(product.colorName)} · Taille ${escapeHtml(line.size)} · ${formatPrice(product.price)}</p>

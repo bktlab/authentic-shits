@@ -1,6 +1,8 @@
 // Catalogue du Drop 01. Prix en centimes pour éviter les erreurs d'arrondi.
 // Pour ajouter un produit : copie un bloc, change l'id (unique) et les champs.
 // `logo` = version du logo imprimée : 'noir' | 'blanc' | 'rouge' | 'broderie'.
+// `image` (optionnel) = photo PNG détourée du vêtement, fond transparent,
+//   ex. image: 'img/produits/gsd-tee-cream.png'. Sans `image`, un mockup s'affiche.
 
 export const CURRENCY = 'EUR';
 
