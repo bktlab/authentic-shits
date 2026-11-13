@@ -1,7 +1,7 @@
 // Page d'entrée avec code d'accès.
 // Mise en scène de drop privé : le code est vérifié dans le navigateur via son empreinte SHA-256.
 // Ce n'est pas une vraie protection (le site reste techniquement accessible), juste un filtre d'entrée.
-import { ACCESS_CODE_SHA256 } from './config.js?v=11';
+import { ACCESS_CODE_SHA256 } from './config.js?v=12';
 
 const STORAGE_KEY = 'as-access';
 const FADE_MS = 450;
