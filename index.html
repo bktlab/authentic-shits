@@ -13,7 +13,7 @@
   <meta property="og:image" content="https://authenticshits.com/img/logo-noir.png">
   <link rel="canonical" href="https://authenticshits.com/">
   <link rel="icon" href="img/logo-noir.png">
-  <link rel="preload" as="image" href="img/logo-noir.png">
+  <link rel="preload" as="image" href="img/triangle-noir.png">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/main.css">
   <script type="module" src="js/app.js"></script>
@@ -32,7 +32,10 @@
       </ul>
     </nav>
     <a href="#top" class="logo" aria-label="Authentic Shits, accueil">
-      <img src="img/logo-noir.png" alt="" width="1000" height="722">
+      <span class="spinner">
+        <img class="spinner-face" src="img/triangle-noir.png" alt="" width="640" height="432" fetchpriority="high">
+        <img class="spinner-face spinner-back" src="img/triangle-rouge.png" alt="" width="640" height="432">
+      </span>
     </a>
     <button class="cart-toggle" type="button" aria-controls="cart" aria-expanded="false">
       Bag (<span data-cart-count>0</span>)
