@@ -1,8 +1,8 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=7';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=7';
-import { productVisual } from './garment.js?v=7';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=7';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=7';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=8';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=8';
+import { productVisual } from './garment.js?v=8';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=8';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=8';
 
 const TOAST_MS = 2200;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -94,7 +94,7 @@ function updateAddButton() {
   const size = selectedSize();
   button.disabled = currentProduct.soldOut || !size;
   if (currentProduct.soldOut) button.textContent = 'Sold out';
-  else button.textContent = size ? 'Ajouter au bag' : 'Choisis ta taille';
+  else button.textContent = size ? 'Ajouter au panier' : 'Choisis ta taille';
 }
 
 function handleAddToCart() {
