@@ -1,8 +1,9 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=8';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=8';
-import { productVisual } from './garment.js?v=8';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=8';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=8';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=10';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=10';
+import { productVisual } from './garment.js?v=10';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=10';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=10';
+import { initGate } from './gate.js?v=10';
 
 const TOAST_MS = 2200;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -262,6 +263,7 @@ function bindEvents() {
 }
 
 $('[data-year]').textContent = String(new Date().getFullYear());
+initGate();
 renderProducts();
 renderCart();
 bindEvents();

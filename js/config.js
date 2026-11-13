@@ -7,6 +7,12 @@
 
 export const SHOPIFY_STORE_DOMAIN = 'qmm0zd-g6.myshopify.com';
 
+// Code d'accès au site (page d'entrée). On stocke seulement son empreinte SHA-256, pas le code.
+// Pour changer le code : dans le Terminal, tape
+//   printf '%s' "NOUVEAUCODE" | shasum -a 256
+// (en MAJUSCULES, sans espaces) et colle le résultat ci-dessous. Mets '' pour retirer la page d'entrée.
+export const ACCESS_CODE_SHA256 = 'd18173715fb71713385ef8eb3660cb395bc669c0fbb85568f688ea48fcae3976';
+
 export const CHECKOUT_MODE = SHOPIFY_STORE_DOMAIN ? 'shopify' : 'demo';
 
 // Uniquement pour l'affichage du récap en mode démo :

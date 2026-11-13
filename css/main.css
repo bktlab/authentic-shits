@@ -108,7 +108,7 @@ img { display: block; max-width: 100%; height: auto; }
   display: flex; justify-content: space-between; align-items: baseline; gap: var(--space-sm);
   margin-bottom: var(--space-md); padding-bottom: 0.5rem; border-bottom: 1px solid var(--color-line);
 }
-.shop-head h1 { font-size: var(--text-lg); }
+.shop-head h2 { font-size: var(--text-lg); }
 .shop-head p { color: var(--color-muted); font-size: var(--text-xs); }
 
 .product-grid {
@@ -257,6 +257,61 @@ dialog[open] { animation: pop var(--duration-normal) var(--ease-out-expo); }
   transition: transform var(--duration-normal) var(--ease-out-expo), opacity var(--duration-normal);
 }
 .toast.is-visible { transform: translate(-50%, 0); opacity: 1; }
+
+/* ---------- Page d'entrée : vieil écran terminal (aucun dégradé) ---------- */
+body.is-locked { overflow: hidden; }
+.gate {
+  --phosphor: #33ff66;
+  --phosphor-dim: #1c9e3e;
+  position: fixed; inset: 0; z-index: 300;
+  display: grid; place-items: center; padding: var(--gutter);
+  background-color: #000;
+  color: var(--phosphor);
+  font-family: var(--font-mono); font-size: 0.9375rem; line-height: 1.6;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  text-shadow: 0 0 4px rgb(51 255 102 / 0.55);
+  transition: opacity 450ms steps(4);
+}
+/* Lignes de balayage nettes (2 px allumés / 1 px éteint) */
+.gate::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: repeating-linear-gradient(to bottom, transparent 0 2px, rgb(0 0 0 / 0.5) 2px 3px);
+}
+.gate.is-open { opacity: 0; pointer-events: none; }
+.gate ::selection { background: var(--phosphor); color: #000; text-shadow: none; }
+.gate-screen { position: relative; width: min(100%, 520px); display: grid; gap: 0.35rem; animation: crt-flicker 4s steps(1) infinite; }
+@keyframes crt-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.93; } 48% { opacity: 1; } 81% { opacity: 0.96; } }
+
+.gate-logo { justify-self: start; margin-bottom: 1rem; }
+.gate .gsd3d { width: 96px; animation: gsd-turn 3s linear infinite; --gsd-color: var(--phosphor); }
+.gate .gsd3d > span { background: var(--phosphor-dim); }
+.gate .gsd3d > span:first-child { background: var(--phosphor); }
+
+.gate-boot { margin: 0 0 0.75rem; font: inherit; color: var(--phosphor-dim); white-space: pre-wrap; }
+.gate-title, .gate-text { font: inherit; color: inherit; margin: 0; }
+.gate-form { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem; }
+.gate-prompt { color: var(--phosphor); }
+.gate-form input {
+  flex: 1; min-width: 0; padding: 0.2rem 0; border: 0; border-radius: 0; background: transparent;
+  color: var(--phosphor); caret-color: var(--phosphor);
+  font: inherit; letter-spacing: 0.3em; text-shadow: inherit;
+}
+.gate-form input:focus { outline: none; }
+.gate-form:focus-within .gate-prompt { animation: blink 1s steps(1) infinite; }
+.gate-form button {
+  padding: 0.2rem 0.4rem; border: 0; border-radius: 0; background: transparent;
+  color: var(--phosphor); font: inherit; text-shadow: inherit; letter-spacing: inherit;
+}
+.gate-form button:hover, .gate-form button:focus-visible { background: var(--phosphor); color: #000; text-shadow: none; outline: none; }
+.gate-form.is-wrong { animation: shake 300ms steps(4); }
+@keyframes shake { 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
+@keyframes blink { 50% { opacity: 0; } }
+.gate-msg { min-height: 1.6em; margin: 0.4rem 0 0; }
+.gate-msg:not(:empty)::before { content: '** '; }
+.gate-msg:not(:empty)::after { content: ' **'; }
+.gate-msg.is-ok { color: var(--phosphor); }
+.gate-foot { margin-top: 1rem; color: var(--phosphor-dim); }
+.gate-foot::after { content: '█'; margin-left: 0.3em; animation: blink 1s steps(1) infinite; }
 
 /* ---------- Réduction des animations ---------- */
 @media (prefers-reduced-motion: reduce) {
