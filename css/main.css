@@ -279,7 +279,7 @@ body.is-locked { overflow: hidden; }
 }
 .gate.is-open { opacity: 0; pointer-events: none; }
 .gate ::selection { background: var(--phosphor); color: #000; text-shadow: none; }
-.gate-screen { position: relative; width: min(100%, 520px); display: grid; gap: 0.35rem; animation: crt-flicker 4s steps(1) infinite; }
+.gate-screen { position: relative; width: min(100%, 420px); display: grid; gap: 0.35rem; animation: crt-flicker 4s steps(1) infinite; }
 @keyframes crt-flicker { 0%, 100% { opacity: 1; } 47% { opacity: 0.93; } 48% { opacity: 1; } 81% { opacity: 0.96; } }
 
 .gate-logo { justify-self: start; margin-bottom: 1rem; }
@@ -287,8 +287,7 @@ body.is-locked { overflow: hidden; }
 .gate .gsd3d > span { background: var(--phosphor-dim); }
 .gate .gsd3d > span:first-child { background: var(--phosphor); }
 
-.gate-boot { margin: 0 0 0.75rem; font: inherit; color: var(--phosphor-dim); white-space: pre-wrap; }
-.gate-title, .gate-text { font: inherit; color: inherit; margin: 0; }
+.gate-title { font: inherit; color: inherit; margin: 0; }
 .gate-form { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.4rem; }
 .gate-prompt { color: var(--phosphor); }
 .gate-form input {
@@ -307,11 +306,7 @@ body.is-locked { overflow: hidden; }
 @keyframes shake { 25% { transform: translateX(-6px); } 50% { transform: translateX(6px); } 75% { transform: translateX(-3px); } }
 @keyframes blink { 50% { opacity: 0; } }
 .gate-msg { min-height: 1.6em; margin: 0.4rem 0 0; }
-.gate-msg:not(:empty)::before { content: '** '; }
-.gate-msg:not(:empty)::after { content: ' **'; }
 .gate-msg.is-ok { color: var(--phosphor); }
-.gate-foot { margin-top: 1rem; color: var(--phosphor-dim); }
-.gate-foot::after { content: '█'; margin-left: 0.3em; animation: blink 1s steps(1) infinite; }
 
 /* ---------- Réduction des animations ---------- */
 @media (prefers-reduced-motion: reduce) {

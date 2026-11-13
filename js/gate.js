@@ -1,7 +1,7 @@
 // Page d'entrée avec code d'accès.
 // Mise en scène de drop privé : le code est vérifié dans le navigateur via son empreinte SHA-256.
 // Ce n'est pas une vraie protection (le site reste techniquement accessible), juste un filtre d'entrée.
-import { ACCESS_CODE_SHA256 } from './config.js?v=10';
+import { ACCESS_CODE_SHA256 } from './config.js?v=11';
 
 const STORAGE_KEY = 'as-access';
 const FADE_MS = 450;
@@ -64,18 +64,18 @@ export function initGate() {
     event.preventDefault();
     const code = normalize(input.value);
     if (!code) {
-      msg.textContent = 'Entre un code.';
+      msg.textContent = 'Enter a code.';
       return;
     }
     const isValid = (await sha256Hex(code)) === ACCESS_CODE_SHA256;
     if (isValid) {
-      msg.textContent = 'Accès autorisé.';
+      msg.textContent = 'Access granted.';
       msg.classList.add('is-ok');
       storeAccess();
       unlock(gate);
       return;
     }
-    msg.textContent = 'Code invalide.';
+    msg.textContent = 'Access denied.';
     form.classList.add('is-wrong');
     setTimeout(() => form.classList.remove('is-wrong'), SHAKE_MS);
     input.select();
