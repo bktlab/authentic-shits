@@ -1,11 +1,12 @@
-// Page d'entrée avec code d'accès.
-// Mise en scène de drop privé : le code est vérifié dans le navigateur via son empreinte SHA-256.
-// Ce n'est pas une vraie protection (le site reste techniquement accessible), juste un filtre d'entrée.
-import { ACCESS_CODE_SHA256 } from './config.js?v=14';
+// Écran de verrouillage : logo, inscription e-mail, et accès par mot de passe.
+// Le mot de passe est vérifié dans le navigateur via son empreinte SHA-256 :
+// c'est un filtre d'entrée (drop privé), pas une vraie protection.
+import { ACCESS_CODE_SHA256 } from './config.js?v=22';
 
 const STORAGE_KEY = 'as-access';
-const FADE_MS = 450;
-const SHAKE_MS = 400;
+const FADE_MS = 400;
+const SHAKE_MS = 320;
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const normalize = (value) => value.trim().replace(/\s+/g, '').toUpperCase();
 
@@ -27,7 +28,7 @@ function storeAccess() {
   try {
     localStorage.setItem(STORAGE_KEY, ACCESS_CODE_SHA256);
   } catch {
-    // stockage indisponible : le code sera redemandé à la prochaine visite
+    // stockage indisponible : le mot de passe sera redemandé à la prochaine visite
   }
 }
 
@@ -36,27 +37,68 @@ function setPageInert(isInert) {
   document.body.classList.toggle('is-locked', isInert);
 }
 
-// Compteur façon magnétoscope : 0:00:00 qui défile pendant que l'écran est affiché.
-function startCounter(gate) {
-  const el = gate.querySelector('[data-vhs-time]');
-  if (!el) return () => {};
-  const startedAt = Date.now();
-  const tick = () => {
-    const total = Math.floor((Date.now() - startedAt) / 1000);
-    const h = Math.floor(total / 3600);
-    const m = String(Math.floor((total % 3600) / 60)).padStart(2, '0');
-    const sec = String(total % 60).padStart(2, '0');
-    el.textContent = `${h}:${m}:${sec}`;
-  };
-  tick();
-  const id = setInterval(tick, 1000);
-  return () => clearInterval(id);
-}
-
 function unlock(gate) {
   setPageInert(false);
   gate.classList.add('is-open');
   setTimeout(() => gate.remove(), FADE_MS);
+}
+
+function shake(form) {
+  form.classList.add('is-wrong');
+  setTimeout(() => form.classList.remove('is-wrong'), SHAKE_MS);
+}
+
+function bindEmail(gate) {
+  const form = gate.querySelector('[data-gate-email]');
+  const input = form.querySelector('input');
+  const msg = gate.querySelector('[data-gate-email-msg]');
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const isValid = EMAIL_RE.test(input.value.trim());
+    msg.classList.toggle('is-ok', isValid);
+    if (!isValid) {
+      msg.textContent = 'Enter a valid email.';
+      shake(form);
+      return;
+    }
+    // À brancher sur l'outil d'e-mailing (Shopify Email, Klaviyo…) : rien n'est encore envoyé.
+    msg.textContent = 'You’re on the list.';
+    form.reset();
+  });
+}
+
+function bindPasswordToggle(gate) {
+  const toggle = gate.querySelector('[data-gate-toggle]');
+  const form = gate.querySelector('[data-gate-form]');
+  toggle.addEventListener('click', () => {
+    const isOpen = form.hidden;
+    form.hidden = !isOpen;
+    toggle.setAttribute('aria-expanded', String(isOpen));
+    if (isOpen) form.querySelector('input').focus();
+  });
+}
+
+function bindPassword(gate) {
+  const form = gate.querySelector('[data-gate-form]');
+  const input = gate.querySelector('[data-gate-input]');
+  const msg = gate.querySelector('[data-gate-msg]');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const code = normalize(input.value);
+    if (!code) {
+      msg.textContent = 'Enter the password.';
+      return;
+    }
+    if ((await sha256Hex(code)) === ACCESS_CODE_SHA256) {
+      msg.textContent = '';
+      storeAccess();
+      unlock(gate);
+      return;
+    }
+    msg.textContent = 'Wrong password.';
+    shake(form);
+    input.select();
+  });
 }
 
 export function initGate() {
@@ -72,31 +114,7 @@ export function initGate() {
   }
 
   setPageInert(true);
-  const stopCounter = startCounter(gate);
-  const form = gate.querySelector('[data-gate-form]');
-  const input = gate.querySelector('[data-gate-input]');
-  const msg = gate.querySelector('[data-gate-msg]');
-  input.focus();
-
-  form.addEventListener('submit', async (event) => {
-    event.preventDefault();
-    const code = normalize(input.value);
-    if (!code) {
-      msg.textContent = 'Enter a code.';
-      return;
-    }
-    const isValid = (await sha256Hex(code)) === ACCESS_CODE_SHA256;
-    if (isValid) {
-      msg.textContent = 'Access granted.';
-      msg.classList.add('is-ok');
-      storeAccess();
-      stopCounter();
-      unlock(gate);
-      return;
-    }
-    msg.textContent = 'Access denied.';
-    form.classList.add('is-wrong');
-    setTimeout(() => form.classList.remove('is-wrong'), SHAKE_MS);
-    input.select();
-  });
+  bindEmail(gate);
+  bindPasswordToggle(gate);
+  bindPassword(gate);
 }

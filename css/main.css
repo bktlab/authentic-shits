@@ -258,60 +258,45 @@ dialog[open] { animation: pop var(--duration-normal) var(--ease-out-expo); }
 }
 .toast.is-visible { transform: translate(-50%, 0); opacity: 1; }
 
-/* ---------- Page d'entrée : menu VHS, fond noir, traits blancs (aucun dégradé) ---------- */
+/* ---------- Écran de verrouillage : logo, e-mail, mot de passe ---------- */
 body.is-locked { overflow: hidden; }
 .gate {
-  --vhs-white: #f4f4f4;
-  --vhs-magenta: rgb(255 40 200 / 0.75);
-  --vhs-cyan: rgb(40 230 255 / 0.75);
   position: fixed; inset: 0; z-index: 300;
   display: grid; place-items: center; padding: var(--gutter);
-  background-color: #000;
-  color: var(--vhs-white);
-  font-family: var(--font-mono); font-weight: 700; font-size: clamp(1rem, 0.85rem + 0.8vw, 1.35rem);
-  line-height: 1.5; text-transform: uppercase; letter-spacing: 0.08em;
-  /* décalage magenta / cyan des vieilles cassettes */
-  text-shadow: -2px 0 var(--vhs-magenta), 2px 0 var(--vhs-cyan);
-  transition: opacity 400ms steps(4);
+  background-color: var(--color-bg);
+  transition: opacity 400ms ease;
 }
 .gate.is-open { opacity: 0; pointer-events: none; }
-.gate ::selection { background: var(--vhs-white); color: #000; text-shadow: none; }
-.gate-screen { width: min(100%, 560px); display: grid; gap: var(--space-sm); }
-
-/* Ligne de tirets, avec un titre centré optionnel : ---------- ACCESS ---------- */
-.vhs-rule { display: flex; align-items: center; gap: 0.8em; margin: 0; font: inherit; color: inherit; }
-.vhs-rule::before, .vhs-rule::after {
-  content: ''; flex: 1; height: 0;
-  border-top: 3px dashed var(--vhs-white);
-  filter: drop-shadow(-2px 0 var(--vhs-magenta)) drop-shadow(2px 0 var(--vhs-cyan));
+.gate-screen { width: min(100%, 320px); display: grid; justify-items: center; gap: 0.6rem; }
+.gate-logo { margin-bottom: var(--space-md); }
+.gate .gsd3d { width: 56px; }
+.gate-row { display: flex; gap: 4px; width: 100%; }
+.gate-row[hidden] { display: none; }
+.gate-row input {
+  flex: 1; min-width: 0; padding: 0.6rem 0.7rem;
+  border: 1px solid var(--color-line-strong); border-radius: var(--radius);
+  background-color: var(--color-card); color: var(--color-strong); font: inherit;
 }
-.vhs-rule:empty { gap: 0; }
-.vhs-rule:empty::after { display: none; }
-.vhs-head { font-size: 1.35em; letter-spacing: 0.12em; }
-
-.gate-logo { justify-self: center; margin: var(--space-xs) 0; filter: drop-shadow(-2px 0 var(--vhs-magenta)) drop-shadow(2px 0 var(--vhs-cyan)); }
-.gate .gsd3d { width: clamp(90px, 22vw, 130px); }
-
-.gate-form { display: grid; gap: 0.4rem; }
-.vhs-label { font-size: 1.1em; }
-.vhs-input { display: flex; align-items: baseline; gap: 0.7em; }
-.vhs-arrow { flex: none; }
-.gate-form:focus-within .vhs-arrow { animation: blink 1s steps(1) infinite; }
-@keyframes blink { 50% { opacity: 0; } }
-.vhs-input input {
-  flex: 1; min-width: 0; padding: 0.15em 0; border: 0; border-bottom: 3px dashed var(--vhs-white); border-radius: 0;
-  background: transparent; color: var(--vhs-white); caret-color: var(--vhs-white);
-  font: inherit; letter-spacing: 0.35em; text-shadow: inherit;
+.gate-row input::placeholder { color: var(--color-muted); }
+.gate-row input:focus { outline: none; border-color: var(--color-link); }
+.gate-row button {
+  padding: 0.6rem 0.9rem; border: 1px solid var(--color-line-strong); border-radius: var(--radius);
+  background-color: var(--color-panel); color: var(--color-strong); font-size: var(--text-sm); white-space: nowrap;
 }
-.vhs-input input:focus { outline: none; }
-.gate-form.is-wrong { animation: vhs-jitter 320ms steps(4); }
-@keyframes vhs-jitter { 25% { transform: translate(-6px, 1px); } 50% { transform: translate(5px, -1px); } 75% { transform: translate(-2px, 0); } }
-.gate-msg { min-height: 1.5em; margin: 0; }
-
-.vhs-foot { display: flex; justify-content: space-between; align-items: end; gap: var(--space-md); font-size: 0.8em; }
-.vhs-foot p { margin: 0; }
-.vhs-counter { display: grid; grid-template-columns: auto auto; gap: 0 1.6em; justify-items: end; }
-.vhs-counter [data-vhs-time] { grid-column: 1 / -1; font-variant-numeric: tabular-nums; }
+.gate-row button:hover { border-color: var(--color-muted); }
+.gate-pass input { font-family: var(--font-mono); letter-spacing: 0.15em; }
+.gate-pass input::placeholder { font-family: var(--font-body); letter-spacing: 0; }
+.gate-row.is-wrong { animation: shake 320ms; }
+.gate-row.is-wrong input { border-color: var(--color-red-bright); }
+@keyframes shake { 25% { transform: translateX(-5px); } 50% { transform: translateX(5px); } 75% { transform: translateX(-2px); } }
+.gate-toggle {
+  margin-top: var(--space-xs); padding: 0.2rem; border: 0; background: none;
+  color: var(--color-muted); font-size: var(--text-xs); text-decoration: underline; text-underline-offset: 3px;
+}
+.gate-toggle:hover { color: var(--color-text); }
+.gate-msg { min-height: 1em; font-size: var(--text-xs); color: var(--color-red-bright); text-align: center; }
+.gate-msg:empty { min-height: 0; margin: -0.3rem 0; }
+.gate-msg.is-ok { color: var(--color-ok); }
 
 /* ---------- Réduction des animations ---------- */
 @media (prefers-reduced-motion: reduce) {

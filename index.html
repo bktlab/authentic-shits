@@ -14,15 +14,14 @@
   <link rel="canonical" href="https://authenticshits.com/">
   <link rel="icon" href="img/logo-noir.png">
   <link rel="preload" as="image" href="img/triangle-noir.png">
-  <link rel="stylesheet" href="css/tokens.css?v=14">
-  <link rel="stylesheet" href="css/main.css?v=14">
-  <link rel="stylesheet" href="css/logo3d.css?v=14">
-  <script type="module" src="js/app.js?v=14"></script>
+  <link rel="stylesheet" href="css/tokens.css?v=22">
+  <link rel="stylesheet" href="css/main.css?v=22">
+  <link rel="stylesheet" href="css/logo3d.css?v=22">
+  <script type="module" src="js/app.js?v=22"></script>
 </head>
 <body class="is-locked">
-  <div class="gate" data-gate lang="en" role="dialog" aria-modal="true" aria-labelledby="gate-title">
+  <div class="gate" data-gate lang="en" role="dialog" aria-modal="true" aria-label="Authentic Shits">
     <div class="gate-screen">
-      <h1 id="gate-title" class="vhs-rule vhs-head">Access</h1>
       <div class="logo gate-logo" aria-hidden="true">
         <span class="gsd3d">
           <span></span>
@@ -41,20 +40,19 @@
           <span></span>
         </span>
       </div>
-      <form class="gate-form" data-gate-form novalidate>
-        <label for="gate-code" class="vhs-label">Code</label>
-        <div class="vhs-input">
-          <span class="vhs-arrow" aria-hidden="true">➤</span>
-          <input id="gate-code" data-gate-input type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
-        </div>
-        <button type="submit" class="sr-only">Enter</button>
+      <form class="gate-row" data-gate-email novalidate>
+        <label for="gate-email" class="sr-only">Email</label>
+        <input id="gate-email" type="email" autocomplete="email" placeholder="Email" required>
+        <button type="submit">Notify me</button>
+      </form>
+      <p class="gate-msg" role="status" data-gate-email-msg></p>
+      <button class="gate-toggle" type="button" data-gate-toggle aria-expanded="false" aria-controls="gate-pass">Password</button>
+      <form class="gate-row gate-pass" id="gate-pass" data-gate-form hidden novalidate>
+        <label for="gate-code" class="sr-only">Password</label>
+        <input id="gate-code" data-gate-input type="password" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Password" required>
+        <button type="submit">Enter</button>
       </form>
       <p class="gate-msg" role="alert" data-gate-msg></p>
-      <div class="vhs-rule" aria-hidden="true"></div>
-      <div class="vhs-foot" aria-hidden="true">
-        <p>Set&nbsp;&nbsp;:➤ Enter key</p>
-        <p class="vhs-counter"><span>Play</span><span>SP</span><span data-vhs-time>0:00:00</span></p>
-      </div>
     </div>
   </div>
   <a class="skip-link" href="#shop">Aller à la boutique</a>
