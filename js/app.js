@@ -1,9 +1,9 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=30';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=30';
-import { productVisual } from './garment.js?v=30';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_STARTS_AT } from './config.js?v=30';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=30';
-import { initGate } from './gate.js?v=30';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=31';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=31';
+import { productVisual } from './garment.js?v=31';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_STARTS_AT } from './config.js?v=31';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=31';
+import { initGate } from './gate.js?v=31';
 
 const TOAST_MS = 2200;
 const TICK_MS = 1000;
@@ -83,6 +83,13 @@ function renderSpecs(product) {
     `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('');
 }
 
+/* ---------- Ouverture du drop ---------- */
+const DROP_START_MS = Date.parse(DROP_STARTS_AT);
+const DROP_SOON_LABEL = 'Available 14.02';
+
+// Vrai si aucune date n'est réglée ou si la date d'ouverture est passée.
+const isDropOpen = () => Number.isNaN(DROP_START_MS) || Date.now() >= DROP_START_MS;
+
 function selectedSize() {
   return $('[data-pd-sizes] input:checked')?.value ?? null;
 }
@@ -90,14 +97,15 @@ function selectedSize() {
 function updateAddButton() {
   const button = $('[data-pd-add]');
   const size = selectedSize();
-  button.disabled = currentProduct.soldOut || !size;
+  button.disabled = currentProduct.soldOut || !size || !isDropOpen();
   if (currentProduct.soldOut) button.textContent = 'Sold out';
+  else if (!isDropOpen()) button.textContent = DROP_SOON_LABEL;
   else button.textContent = size ? 'Add to cart' : 'Pick a size';
 }
 
 function handleAddToCart() {
   const size = selectedSize();
-  if (!currentProduct || currentProduct.soldOut || !size) return;
+  if (!currentProduct || currentProduct.soldOut || !size || !isDropOpen()) return;
   commitCart(addItem(cart, currentProduct.id, size));
   $('[data-product-dialog]').close();
   bumpCount();
@@ -117,8 +125,8 @@ function renderCart() {
   $('[data-cart-count]').textContent = String(count);
   $('[data-cart-total]').textContent = formatPrice(cartTotal(cart));
   $('[data-cart-empty]').hidden = !isEmpty;
-  $('[data-checkout]').disabled = isEmpty;
-  $('[data-checkout]').textContent = 'Checkout';
+  $('[data-checkout]').disabled = isEmpty || !isDropOpen();
+  $('[data-checkout]').textContent = isDropOpen() ? 'Checkout' : DROP_SOON_LABEL;
   $('[data-cart-lines]').innerHTML = cart.map(renderCartLine).join('');
 }
 
@@ -162,7 +170,7 @@ function setCartOpen(isOpen) {
 
 /* ---------- Checkout ---------- */
 function handleCheckout() {
-  if (cart.length === 0) return;
+  if (cart.length === 0 || !isDropOpen()) return;
   if (CHECKOUT_MODE === 'shopify') {
     goToShopifyCheckout();
     return;
@@ -251,10 +259,10 @@ function countdownParts(msLeft) {
 }
 
 function startCountdown() {
-  const start = Date.parse(DROP_STARTS_AT);
-  if (!DROP_STARTS_AT || Number.isNaN(start)) return; // pas de date : bandeau statique
+  const start = DROP_START_MS;
+  if (Number.isNaN(start)) return; // pas de date : bandeau statique
   const bar = $('[data-drop-bar]');
-  if (start <= Date.now()) return; // drop ouvert : on garde « Authentic Wear S01E01 — out now »
+  if (isDropOpen()) return; // drop ouvert : on garde « Authentic Wear S01E01 — out now »
   bar.innerHTML = 'Authentic Wear S01E01 <span class="sep">—</span> 14.02 <span class="sep">—</span> in <span class="countdown" role="timer" aria-live="off"></span>';
   const box = bar.querySelector('.countdown');
   const tick = () => {
@@ -262,6 +270,8 @@ function startCountdown() {
     if (msLeft <= 0) {
       bar.innerHTML = 'Authentic Wear S01E01 <span class="sep">—</span> out now <span class="sep">—</span> no restock';
       clearInterval(timer);
+      renderCart(); // le drop s'ouvre : on réactive le checkout
+      if (currentProduct) updateAddButton();
       return;
     }
     box.innerHTML = countdownParts(msLeft)
