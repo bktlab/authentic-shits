@@ -14,7 +14,7 @@ export const SHOPIFY_STORE_DOMAIN = 'qmm0zd-g6.myshopify.com';
 export const ACCESS_CODE_SHA256 = 'cbc86fb19d05603762d6b9144c4e6e939d30820d9ee93746ca7bf29e2e459496';
 
 // Ouverture du drop (compte à rebours dans le bandeau rouge), en heure UTC.
-// Exemple : '2027-02-13T23:00:00Z'. Laisse '' pour afficher « Drop 01 — out now ».
+// Exemple : '2027-02-13T23:00:00Z'. Laisse '' pour afficher « Authentic Wear S01E01 — out now ».
 export const DROP_STARTS_AT = '2027-02-13T23:00:00Z'; // dimanche 14 févr. 2027, 00h00 heure de Paris
 
 export const CHECKOUT_MODE = SHOPIFY_STORE_DOMAIN ? 'shopify' : 'demo';
