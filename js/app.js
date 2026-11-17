@@ -1,9 +1,9 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=26';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=26';
-import { productVisual } from './garment.js?v=26';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_ENDS_AT } from './config.js?v=26';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=26';
-import { initGate } from './gate.js?v=26';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=28';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=28';
+import { productVisual } from './garment.js?v=28';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_ENDS_AT } from './config.js?v=28';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=28';
+import { initGate } from './gate.js?v=28';
 
 const TOAST_MS = 2200;
 const TICK_MS = 1000;
