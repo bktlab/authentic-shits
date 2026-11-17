@@ -1,12 +1,12 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=23';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=23';
-import { productVisual } from './garment.js?v=23';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=23';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=23';
-import { initGate } from './gate.js?v=23';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=26';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=26';
+import { productVisual } from './garment.js?v=26';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_ENDS_AT } from './config.js?v=26';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=26';
+import { initGate } from './gate.js?v=26';
 
 const TOAST_MS = 2200;
-const CLOCK_MS = 1000;
+const TICK_MS = 1000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const $ = (selector) => document.querySelector(selector);
@@ -16,42 +16,25 @@ const escapeHtml = (text) =>
 let cart = loadCart();
 let currentProduct = null;
 
-/* ---------- Annonces produits ---------- */
-const CATEGORY_LABELS = Object.freeze({ all: 'All', hoodie: 'Hoodies', tee: 'Tees', cap: 'Caps' });
-const CRUMBS = Object.freeze({ all: 'all', hoodie: 'hoodies', tee: 'tees', cap: 'caps' });
+/* ---------- Produits ---------- */
+const CATEGORY_LABELS = Object.freeze({ all: 'All', hoodie: 'Hoodies', tee: 'T-shirts', cap: 'Caps' });
 
 const sizeLabel = (size) => (size === 'TU' ? 'One size' : size);
 
-const listingId = (product) =>
-  `GSD-${String(PRODUCTS.indexOf(product) + 1).padStart(4, '0')}`;
-
 function renderCategories(active) {
-  const counts = PRODUCTS.reduce((acc, p) => ({ ...acc, [p.kind]: (acc[p.kind] ?? 0) + 1 }), {});
   $('[data-categories]').innerHTML = Object.entries(CATEGORY_LABELS).map(([key, label]) => `
-    <li>
-      <button type="button" data-filter="${key}" aria-pressed="${key === active}">
-        ${escapeHtml(label)} <span>(${key === 'all' ? PRODUCTS.length : counts[key] ?? 0})</span>
-      </button>
-    </li>`).join('');
+    <li><button type="button" class="link-line" data-filter="${key}" aria-pressed="${key === active}">${escapeHtml(label)}</button></li>`).join('');
 }
 
 function renderListing(product) {
-  const status = product.soldOut
-    ? '<span class="tag tag-out">Sold out</span>'
-    : '<span class="tag tag-in">In stock</span>';
+  const price = product.soldOut ? 'Sold out' : formatPrice(product.price);
   return `
     <li>
       <button class="product-card ${product.soldOut ? 'is-sold-out' : ''}" type="button"
         data-open-product="${escapeHtml(product.id)}">
-        <span class="card-strip mono"><span>#${listingId(product)}</span>${status}</span>
         <span class="card-visual">${productVisual(product)}</span>
-        <span class="card-info">
-          <span class="card-title">${escapeHtml(productTitle(product))}</span>
-          <span class="card-spec mono">${escapeHtml(product.material)}</span>
-          <span class="card-meta"><span>Vendor</span><span>authentic_shits <span class="verified">✓</span></span></span>
-          <span class="card-meta"><span>Ships</span><span>FR → World</span></span>
-          <span class="card-price mono"><span>${formatPrice(product.price)}</span><span class="card-cta">${product.soldOut ? 'Gone' : 'View →'}</span></span>
-        </span>
+        <span class="card-name">${escapeHtml(productTitle(product))}</span>
+        <span class="card-price">${price}</span>
       </button>
     </li>`;
 }
@@ -59,8 +42,6 @@ function renderListing(product) {
 function renderProducts(filter = 'all') {
   const visible = filter === 'all' ? PRODUCTS : PRODUCTS.filter((p) => p.kind === filter);
   $('[data-product-grid]').innerHTML = visible.map(renderListing).join('');
-  $('[data-result-count]').textContent = `${visible.length} listing${visible.length > 1 ? 's' : ''}`;
-  $('[data-crumb]').textContent = CRUMBS[filter];
   renderCategories(filter);
 }
 
@@ -80,7 +61,6 @@ function openProduct(id) {
   $('[data-pd-name]').textContent = productTitle(product);
   $('[data-pd-price]').textContent = formatPrice(product.price);
   $('[data-pd-tagline]').textContent = product.tagline;
-  $('[data-pd-id]').textContent = `Listing #${listingId(product)}`;
   $('[data-pd-specs]').innerHTML = renderSpecs(product);
   $('[data-pd-sizes]').innerHTML = product.sizes.map((size) => `
     <label>
@@ -97,9 +77,7 @@ function renderSpecs(product) {
   const rows = [
     ['Material', product.material],
     ['Fit', product.fit],
-    ['Vendor', 'authentic_shits ✓'],
-    ['Ships from', 'France → World'],
-    ['Payment', 'Shopify Checkout'],
+    ['Ships from', 'France'],
   ];
   return rows.map(([label, value]) =>
     `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('');
@@ -259,12 +237,37 @@ function bumpCount() {
   badge.classList.add('bump');
 }
 
-function startClock() {
-  const clock = $('[data-clock]');
-  if (!clock) return;
-  const tick = () => { clock.textContent = new Date().toISOString().slice(11, 19); };
+/* ---------- Compte à rebours du drop ---------- */
+const pad = (n) => String(n).padStart(2, '0');
+
+function countdownParts(msLeft) {
+  const total = Math.max(0, Math.floor(msLeft / 1000));
+  return [
+    [Math.floor(total / 86400), 'Days'],
+    [Math.floor(total / 3600) % 24, 'Hrs'],
+    [Math.floor(total / 60) % 60, 'Min'],
+    [total % 60, 'Sec'],
+  ];
+}
+
+function startCountdown() {
+  const end = Date.parse(DROP_ENDS_AT);
+  if (!DROP_ENDS_AT || Number.isNaN(end)) return; // pas de date : bandeau statique
+  const bar = $('[data-drop-bar]');
+  bar.innerHTML = 'Drop 01 closes in <span class="countdown" role="timer" aria-live="off"></span>';
+  const box = bar.querySelector('.countdown');
+  const tick = () => {
+    const msLeft = end - Date.now();
+    if (msLeft <= 0) {
+      bar.textContent = 'Drop 01 is closed';
+      clearInterval(timer);
+      return;
+    }
+    box.innerHTML = countdownParts(msLeft)
+      .map(([value, unit]) => `<span><b>${pad(value)}</b><small>${unit}</small></span>`).join('');
+  };
+  const timer = setInterval(tick, TICK_MS);
   tick();
-  setInterval(tick, CLOCK_MS);
 }
 
 /* ---------- Init ---------- */
@@ -277,6 +280,7 @@ function bindEvents() {
   $('[data-pd-sizes]').addEventListener('change', updateAddButton);
   $('[data-pd-add]').addEventListener('click', handleAddToCart);
   $('.cart-toggle').addEventListener('click', () => setCartOpen(true));
+  $('[data-checkout-top]').addEventListener('click', () => setCartOpen(true));
   $('[data-cart-close]').addEventListener('click', () => setCartOpen(false));
   $('[data-scrim]').addEventListener('click', () => setCartOpen(false));
   $('[data-cart-lines]').addEventListener('click', handleQtyClick);
@@ -294,4 +298,4 @@ initGate();
 renderProducts();
 renderCart();
 bindEvents();
-startClock();
+startCountdown();
