@@ -1,7 +1,7 @@
 // Écran de verrouillage : logo, inscription e-mail, et accès par mot de passe.
 // Le mot de passe est vérifié dans le navigateur via son empreinte SHA-256 :
 // c'est un filtre d'entrée (drop privé), pas une vraie protection.
-import { ACCESS_CODE_SHA256 } from './config.js?v=22';
+import { ACCESS_CODE_SHA256 } from './config.js?v=23';
 
 const STORAGE_KEY = 'as-access';
 const FADE_MS = 400;

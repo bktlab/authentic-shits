@@ -1,11 +1,12 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=22';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=22';
-import { productVisual } from './garment.js?v=22';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=22';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=22';
-import { initGate } from './gate.js?v=22';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=23';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=23';
+import { productVisual } from './garment.js?v=23';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST } from './config.js?v=23';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=23';
+import { initGate } from './gate.js?v=23';
 
 const TOAST_MS = 2200;
+const CLOCK_MS = 1000;
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 const $ = (selector) => document.querySelector(selector);
@@ -16,7 +17,10 @@ let cart = loadCart();
 let currentProduct = null;
 
 /* ---------- Annonces produits ---------- */
-const CATEGORY_LABELS = Object.freeze({ all: 'Tout', hoodie: 'Hoodies', tee: 'T-shirts', cap: 'Casquettes' });
+const CATEGORY_LABELS = Object.freeze({ all: 'All', hoodie: 'Hoodies', tee: 'Tees', cap: 'Caps' });
+const CRUMBS = Object.freeze({ all: 'all', hoodie: 'hoodies', tee: 'tees', cap: 'caps' });
+
+const sizeLabel = (size) => (size === 'TU' ? 'One size' : size);
 
 const listingId = (product) =>
   `GSD-${String(PRODUCTS.indexOf(product) + 1).padStart(4, '0')}`;
@@ -33,20 +37,20 @@ function renderCategories(active) {
 
 function renderListing(product) {
   const status = product.soldOut
-    ? '<span class="tag tag-out">Épuisé</span>'
-    : '<span class="tag tag-in">Disponible</span>';
+    ? '<span class="tag tag-out">Sold out</span>'
+    : '<span class="tag tag-in">In stock</span>';
   return `
     <li>
       <button class="product-card ${product.soldOut ? 'is-sold-out' : ''}" type="button"
         data-open-product="${escapeHtml(product.id)}">
+        <span class="card-strip mono"><span>#${listingId(product)}</span>${status}</span>
         <span class="card-visual">${productVisual(product)}</span>
         <span class="card-info">
           <span class="card-title">${escapeHtml(productTitle(product))}</span>
-          <span class="card-meta"><span>Annonce</span><span class="mono">#${listingId(product)}</span></span>
-          <span class="card-meta"><span>Vendeur</span><span>authentic_shits <span class="verified">✓</span></span></span>
-          <span class="card-meta"><span>Expédié de</span><span>FR → Monde</span></span>
-          <span class="card-meta"><span>Statut</span>${status}</span>
-          <span class="card-price mono">${formatPrice(product.price)}</span>
+          <span class="card-spec mono">${escapeHtml(product.material)}</span>
+          <span class="card-meta"><span>Vendor</span><span>authentic_shits <span class="verified">✓</span></span></span>
+          <span class="card-meta"><span>Ships</span><span>FR → World</span></span>
+          <span class="card-price mono"><span>${formatPrice(product.price)}</span><span class="card-cta">${product.soldOut ? 'Gone' : 'View →'}</span></span>
         </span>
       </button>
     </li>`;
@@ -55,7 +59,8 @@ function renderListing(product) {
 function renderProducts(filter = 'all') {
   const visible = filter === 'all' ? PRODUCTS : PRODUCTS.filter((p) => p.kind === filter);
   $('[data-product-grid]').innerHTML = visible.map(renderListing).join('');
-  $('[data-result-count]').textContent = `${visible.length} annonce${visible.length > 1 ? 's' : ''}`;
+  $('[data-result-count]').textContent = `${visible.length} listing${visible.length > 1 ? 's' : ''}`;
+  $('[data-crumb]').textContent = CRUMBS[filter];
   renderCategories(filter);
 }
 
@@ -75,15 +80,29 @@ function openProduct(id) {
   $('[data-pd-name]').textContent = productTitle(product);
   $('[data-pd-price]').textContent = formatPrice(product.price);
   $('[data-pd-tagline]').textContent = product.tagline;
+  $('[data-pd-id]').textContent = `Listing #${listingId(product)}`;
+  $('[data-pd-specs]').innerHTML = renderSpecs(product);
   $('[data-pd-sizes]').innerHTML = product.sizes.map((size) => `
     <label>
       <input type="radio" name="size" value="${escapeHtml(size)}"
         ${isSingleSize ? 'checked' : ''} ${product.soldOut ? 'disabled' : ''}>
-      <span>${escapeHtml(size)}</span>
+      <span>${escapeHtml(sizeLabel(size))}</span>
     </label>`).join('');
 
   updateAddButton();
   $('[data-product-dialog]').showModal();
+}
+
+function renderSpecs(product) {
+  const rows = [
+    ['Material', product.material],
+    ['Fit', product.fit],
+    ['Vendor', 'authentic_shits ✓'],
+    ['Ships from', 'France → World'],
+    ['Payment', 'Shopify Checkout'],
+  ];
+  return rows.map(([label, value]) =>
+    `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>`).join('');
 }
 
 function selectedSize() {
@@ -95,7 +114,7 @@ function updateAddButton() {
   const size = selectedSize();
   button.disabled = currentProduct.soldOut || !size;
   if (currentProduct.soldOut) button.textContent = 'Sold out';
-  else button.textContent = size ? 'Ajouter au panier' : 'Choisis ta taille';
+  else button.textContent = size ? 'Add to cart' : 'Pick a size';
 }
 
 function handleAddToCart() {
@@ -104,7 +123,7 @@ function handleAddToCart() {
   commitCart(addItem(cart, currentProduct.id, size));
   $('[data-product-dialog]').close();
   bumpCount();
-  showToast(`${productTitle(currentProduct)} (${size}) ajouté`);
+  showToast(`${productTitle(currentProduct)} (${sizeLabel(size)}) added`);
 }
 
 /* ---------- Panier ---------- */
@@ -133,12 +152,12 @@ function renderCartLine(line) {
       <span class="thumb">${productVisual(product)}</span>
       <div>
         <h3>${escapeHtml(product.name)}</h3>
-        <p>${escapeHtml(product.colorName)} · Taille ${escapeHtml(line.size)} · ${formatPrice(product.price)}</p>
+        <p>${escapeHtml(product.colorName)} · ${escapeHtml(sizeLabel(line.size))} · ${formatPrice(product.price)}</p>
       </div>
-      <div class="qty" aria-label="Quantité ${escapeHtml(productTitle(product))}">
-        <button type="button" data-qty="-1" ${key} aria-label="Retirer un">−</button>
+      <div class="qty" aria-label="Quantity ${escapeHtml(productTitle(product))}">
+        <button type="button" data-qty="-1" ${key} aria-label="Remove one">−</button>
         <output>${line.qty}</output>
-        <button type="button" data-qty="1" ${key} aria-label="Ajouter un">+</button>
+        <button type="button" data-qty="1" ${key} aria-label="Add one">+</button>
       </div>
     </li>`;
 }
@@ -177,12 +196,12 @@ function goToShopifyCheckout() {
   const result = buildShopifyCheckoutUrl(cart);
   if (!result.ok) {
     console.error('Checkout Shopify impossible :', result.error, result.missing ?? '');
-    showToast('Checkout indisponible pour le moment. Réessaie plus tard.');
+    showToast('Checkout unavailable right now. Try again later.');
     return;
   }
   const button = $('[data-checkout]');
   button.disabled = true;
-  button.textContent = 'Redirection…';
+  button.textContent = 'Redirecting…';
   window.location.assign(result.url);
 }
 
@@ -191,17 +210,17 @@ function showDemoRecap() {
   const shipping = subtotal >= FREE_SHIPPING_FROM ? 0 : SHIPPING_COST;
   const lines = cart.map((line) => {
     const product = findProduct(line.id);
-    return `<li><span>${line.qty}× ${escapeHtml(productTitle(product))} (${escapeHtml(line.size)})</span>
+    return `<li><span>${line.qty}× ${escapeHtml(productTitle(product))} (${escapeHtml(sizeLabel(line.size))})</span>
       <strong>${formatPrice(product.price * line.qty)}</strong></li>`;
   }).join('');
 
   $('[data-checkout-body]').innerHTML = `
     <ul>
       ${lines}
-      <li><span>Livraison</span><strong>${shipping === 0 ? 'Offerte' : formatPrice(shipping)}</strong></li>
+      <li><span>Shipping</span><strong>${shipping === 0 ? 'Free' : formatPrice(shipping)}</strong></li>
       <li><span>Total</span><strong>${formatPrice(subtotal + shipping)}</strong></li>
     </ul>
-    <p class="checkout-note">Mode démo : la boutique Shopify n'est pas encore reliée. Aucune commande n'a été passée.</p>`;
+    <p class="checkout-note">Demo mode: the Shopify store isn't connected yet. No order was placed.</p>`;
   $('[data-checkout-dialog]').showModal();
 }
 
@@ -214,12 +233,12 @@ function handleNewsletter(event) {
   const isValid = EMAIL_RE.test(email);
   msg.classList.toggle('is-error', !isValid);
   if (!isValid) {
-    msg.textContent = 'Adresse e-mail invalide.';
+    msg.textContent = 'Invalid email address.';
     form.email.focus();
     return;
   }
   // À brancher sur ton outil d'e-mailing (Brevo, Mailchimp, Klaviyo…).
-  msg.textContent = 'Inscription enregistrée. (démo : rien n\'est encore envoyé)';
+  msg.textContent = 'You’re on the list.';
   form.reset();
 }
 
@@ -238,6 +257,14 @@ function bumpCount() {
   badge.classList.remove('bump');
   void badge.offsetWidth; // relance l'animation
   badge.classList.add('bump');
+}
+
+function startClock() {
+  const clock = $('[data-clock]');
+  if (!clock) return;
+  const tick = () => { clock.textContent = new Date().toISOString().slice(11, 19); };
+  tick();
+  setInterval(tick, CLOCK_MS);
 }
 
 /* ---------- Init ---------- */
@@ -267,3 +294,4 @@ initGate();
 renderProducts();
 renderCart();
 bindEvents();
+startClock();

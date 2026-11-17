@@ -1,26 +1,26 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Authentic Shits — Get Shit Done</title>
-  <meta name="description" content="Authentic Shits. Get shit done. Drop 01 disponible, quantités limitées.">
+  <meta name="description" content="Authentic Shits. Get shit done. Drop 01 out now. Limited quantities.">
   <meta name="theme-color" content="#0e0e0e">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; form-action 'self'; base-uri 'self'; object-src 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta property="og:title" content="Authentic Shits — Get Shit Done">
-  <meta property="og:description" content="Drop 01 disponible. Quantités limitées, pas de restock.">
+  <meta property="og:description" content="Drop 01 out now. Limited quantities, no restock.">
   <meta property="og:image" content="https://authenticshits.com/img/logo-noir.png">
   <link rel="canonical" href="https://authenticshits.com/">
   <link rel="icon" href="img/logo-noir.png">
   <link rel="preload" as="image" href="img/triangle-noir.png">
-  <link rel="stylesheet" href="css/tokens.css?v=22">
-  <link rel="stylesheet" href="css/main.css?v=22">
-  <link rel="stylesheet" href="css/logo3d.css?v=22">
-  <script type="module" src="js/app.js?v=22"></script>
+  <link rel="stylesheet" href="css/tokens.css?v=23">
+  <link rel="stylesheet" href="css/main.css?v=23">
+  <link rel="stylesheet" href="css/logo3d.css?v=23">
+  <script type="module" src="js/app.js?v=23"></script>
 </head>
 <body class="is-locked">
-  <div class="gate" data-gate lang="en" role="dialog" aria-modal="true" aria-label="Authentic Shits">
+  <div class="gate" data-gate role="dialog" aria-modal="true" aria-label="Authentic Shits">
     <div class="gate-screen">
       <div class="logo gate-logo" aria-hidden="true">
         <span class="gsd3d">
@@ -55,20 +55,23 @@
       <p class="gate-msg" role="alert" data-gate-msg></p>
     </div>
   </div>
-  <a class="skip-link" href="#shop">Aller à la boutique</a>
+  <a class="skip-link" href="#shop">Skip to the market</a>
 
-  <p class="announce"><span class="dot"></span> Market en ligne · Drop 01 · Livraison offerte dès 80 € · Paiement sécurisé</p>
+  <div class="statusbar mono">
+    <p><span class="dot" aria-hidden="true"></span> Market online <span class="sep">/</span> Drop 01<span class="statusbar-extra"> <span class="sep">/</span> Free shipping from €80</span></p>
+    <p class="statusbar-right">Secure checkout <span class="sep">/</span> <time data-clock>--:--:--</time> UTC</p>
+  </div>
 
   <header class="site-header">
-    <nav aria-label="Navigation principale">
+    <nav aria-label="Main navigation">
       <ul>
         <li><a href="#shop">Market</a></li>
-        <li><a href="#about">Vendeur</a></li>
-        <li><a href="#club">Alertes</a></li>
+        <li><a href="#about">Vendor</a></li>
+        <li><a href="#club">Alerts</a></li>
       </ul>
     </nav>
-    <a href="#top" class="logo" aria-label="Authentic Shits, accueil">
-      <span class="gsd3d" role="img" aria-label="Logo GSD">
+    <a href="#top" class="logo" aria-label="Authentic Shits, home">
+      <span class="gsd3d" role="img" aria-label="GSD logo">
         <span></span>
         <span></span>
         <span></span>
@@ -85,28 +88,32 @@
         <span></span>
       </span>
     </a>
-    <button class="cart-toggle" type="button" aria-controls="cart" aria-expanded="false">
-      Panier [<span data-cart-count>0</span>]
+    <button class="cart-toggle mono" type="button" aria-controls="cart" aria-expanded="false">
+      Cart [<span data-cart-count>0</span>]
     </button>
   </header>
 
   <main id="top">
     <section id="shop" class="market" aria-labelledby="shop-title">
-      <aside class="market-side" aria-label="Catégories">
-        <h2 class="panel-title">Catégories</h2>
+      <aside class="market-side" aria-label="Categories">
+        <h2 class="panel-title">Categories</h2>
         <ul class="categories" data-categories></ul>
-        <h2 class="panel-title">Infos</h2>
+        <h2 class="panel-title">Vendor info</h2>
         <dl class="side-info">
-          <div><dt>Vendeur</dt><dd>authentic_shits <span class="verified">✓</span></dd></div>
-          <div><dt>Membre depuis</dt><dd>2026</dd></div>
-          <div><dt>Expédition</dt><dd>FR → Monde</dd></div>
-          <div><dt>Restock</dt><dd>Jamais</dd></div>
+          <div><dt>Vendor</dt><dd>authentic_shits <span class="verified">✓</span></dd></div>
+          <div><dt>Since</dt><dd>2026</dd></div>
+          <div><dt>Ships</dt><dd>FR → World</dd></div>
+          <div><dt>Payment</dt><dd>Shopify</dd></div>
+          <div><dt>Restock</dt><dd>Never</dd></div>
         </dl>
       </aside>
       <div class="market-main">
         <header class="shop-head">
-          <h2 id="shop-title">Drop 01</h2>
-          <p class="mono" data-result-count></p>
+          <p class="crumbs mono" aria-hidden="true">market / drop-01 / <span data-crumb>all</span></p>
+          <div class="shop-head-row">
+            <h2 id="shop-title">Drop 01</h2>
+            <p class="mono" data-result-count></p>
+          </div>
         </header>
         <ul class="product-grid" data-product-grid></ul>
       </div>
@@ -115,14 +122,14 @@
     <section id="about" class="about" aria-labelledby="about-title">
       <img class="about-poster" src="img/get-shit-done.png" alt="Get your fckin shit done" width="900" height="1046" loading="lazy">
       <div class="about-text">
-        <h2 id="about-title" class="panel-title">Profil du vendeur</h2>
+        <h2 id="about-title" class="panel-title">Vendor profile</h2>
         <pre class="signed-msg">-----BEGIN GSD SIGNED MESSAGE-----
 
-Pas de hype. Pas de fake. Pas de pub.
-Des pièces lourdes, bien coupées,
-faites pour ceux qui avancent sans bruit.
+No hype. No fakes. No ads.
+Heavy pieces, cut right,
+made for those who move without noise.
 
-Une seule règle : Get. Shit. Done.
+One rule only: Get. Shit. Done.
 
 — authentic_shits
 -----END GSD SIGNED MESSAGE-----</pre>
@@ -130,54 +137,56 @@ Une seule règle : Get. Shit. Done.
     </section>
 
     <section id="club" class="club" aria-labelledby="club-title">
-      <h2 id="club-title" class="panel-title">Alertes drop</h2>
-      <p>Reçois l'adresse du prochain drop avant tout le monde.</p>
+      <h2 id="club-title" class="panel-title">Drop alerts</h2>
+      <p>Get the address of the next drop before anyone else.</p>
       <form class="club-form" data-newsletter novalidate>
-        <label for="email" class="sr-only">Adresse e-mail</label>
-        <input id="email" name="email" type="email" autocomplete="email" placeholder="ton@email" required>
-        <button type="submit">S'abonner</button>
+        <label for="email" class="sr-only">Email address</label>
+        <input id="email" name="email" type="email" autocomplete="email" placeholder="you@email" required>
+        <button type="submit">Subscribe</button>
         <p class="form-msg" role="status" data-newsletter-msg></p>
       </form>
     </section>
   </main>
 
-  <footer class="site-footer">
+  <footer class="site-footer mono">
     <ul>
       <li><a href="#" aria-disabled="true">Instagram</a></li>
       <li><a href="#" aria-disabled="true">TikTok</a></li>
-      <li><a href="#" aria-disabled="true">CGV</a></li>
+      <li><a href="#" aria-disabled="true">Terms</a></li>
       <li><a href="#" aria-disabled="true">Contact</a></li>
     </ul>
-    <p>© <span data-year></span> Authentic Shits Market</p>
+    <p>© <span data-year></span> Authentic Shits Market <span class="sep">/</span> Payments by Shopify</p>
   </footer>
 
   <!-- Fiche produit -->
   <dialog class="product-dialog" data-product-dialog aria-labelledby="pd-name">
-    <form method="dialog" class="dialog-close-form"><button class="text-btn" aria-label="Fermer">Fermer ✕</button></form>
+    <form method="dialog" class="dialog-close-form"><button class="text-btn mono" aria-label="Close">Close ✕</button></form>
     <div class="pd-visual" data-pd-visual></div>
     <div class="pd-body">
+      <p class="pd-id mono" data-pd-id></p>
       <h2 id="pd-name" data-pd-name></h2>
       <p class="pd-price" data-pd-price></p>
       <p class="pd-tagline" data-pd-tagline></p>
+      <dl class="pd-specs" data-pd-specs></dl>
       <fieldset class="size-picker">
-        <legend>Taille</legend>
+        <legend>Size</legend>
         <div class="sizes" data-pd-sizes></div>
       </fieldset>
-      <button class="btn btn-block" type="button" data-pd-add>Ajouter au panier</button>
+      <button class="btn btn-block" type="button" data-pd-add>Add to cart</button>
     </div>
   </dialog>
 
   <!-- Panier -->
-  <aside id="cart" class="cart" aria-label="Panier" aria-hidden="true" inert>
+  <aside id="cart" class="cart" aria-label="Cart" aria-hidden="true" inert>
     <div class="cart-head">
-      <h2>Panier</h2>
-      <button class="text-btn" type="button" data-cart-close aria-label="Fermer le panier">Fermer ✕</button>
+      <h2 class="mono">Cart</h2>
+      <button class="text-btn mono" type="button" data-cart-close aria-label="Close cart">Close ✕</button>
     </div>
     <ul class="cart-lines" data-cart-lines></ul>
-    <p class="cart-empty" data-cart-empty>Ton panier est vide.</p>
+    <p class="cart-empty" data-cart-empty>Your cart is empty.</p>
     <div class="cart-foot">
-      <p class="cart-total"><span>Sous-total</span> <strong data-cart-total>0 €</strong></p>
-      <p class="muted">Livraison offerte dès 80 €.</p>
+      <p class="cart-total"><span>Subtotal</span> <strong data-cart-total>€0.00</strong></p>
+      <p class="muted">Free shipping from €80. Taxes and shipping calculated at checkout.</p>
       <button class="btn btn-block" type="button" data-checkout>Checkout</button>
     </div>
   </aside>
@@ -185,7 +194,7 @@ Une seule règle : Get. Shit. Done.
 
   <!-- Récap commande (mode démo) -->
   <dialog class="checkout-dialog" data-checkout-dialog aria-labelledby="co-title">
-    <h2 id="co-title">Récap commande</h2>
+    <h2 id="co-title">Order summary</h2>
     <div data-checkout-body></div>
     <form method="dialog"><button class="btn btn-block">OK</button></form>
   </dialog>

@@ -7,14 +7,16 @@
 export const CURRENCY = 'EUR';
 
 const CLOTHING_SIZES = Object.freeze(['S', 'M', 'L', 'XL']);
-const ONE_SIZE = Object.freeze(['TU']);
+const ONE_SIZE = Object.freeze(['TU']); // « TU » = taille unique, doit rester tel quel (variantes Shopify)
 
 export const PRODUCTS = Object.freeze([
   {
     id: 'gsd-hoodie-black',
     name: 'GSD Hoodie',
     colorName: 'Black',
-    tagline: 'Molleton 450g, coupe large. Logo GSD Authentic sérigraphié poitrine.',
+    tagline: 'Heavy fleece, boxy oversized fit. GSD Authentic logo screen-printed on the chest.',
+    material: '450 GSM fleece',
+    fit: 'Oversized',
     price: 7500,
     kind: 'hoodie',
     color: '#151515',
@@ -25,7 +27,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-tee-cream',
     name: 'GSD Tee',
     colorName: 'Cream',
-    tagline: 'Coton bio 240g, coupe carrée. Logo rouge.',
+    tagline: 'Organic cotton, boxy fit. Red GSD logo.',
+    material: '240 GSM organic cotton',
+    fit: 'Boxy',
     price: 3500,
     kind: 'tee',
     color: '#ece6da',
@@ -36,7 +40,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-tee-black',
     name: 'GSD Tee',
     colorName: 'Black',
-    tagline: 'Coton bio 240g, coupe carrée. Logo blanc.',
+    tagline: 'Organic cotton, boxy fit. White GSD logo.',
+    material: '240 GSM organic cotton',
+    fit: 'Boxy',
     price: 3500,
     kind: 'tee',
     color: '#151515',
@@ -47,7 +53,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-hoodie-grey',
     name: 'GSD Hoodie',
     colorName: 'Heather Grey',
-    tagline: 'Molleton 450g, coupe large. Logo brodé 2 couleurs.',
+    tagline: 'Heavy fleece, boxy oversized fit. Two-tone embroidered logo.',
+    material: '450 GSM fleece',
+    fit: 'Oversized',
     price: 7900,
     kind: 'hoodie',
     color: '#9a9c9e',
@@ -59,7 +67,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-tee-red',
     name: 'GSD Tee',
     colorName: 'Red',
-    tagline: 'Coton bio 240g, coupe carrée. Logo blanc.',
+    tagline: 'Organic cotton, boxy fit. White GSD logo.',
+    material: '240 GSM organic cotton',
+    fit: 'Boxy',
     price: 3500,
     kind: 'tee',
     color: '#8e1c1c',
@@ -70,7 +80,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-tee-green',
     name: 'GSD Tee',
     colorName: 'Forest',
-    tagline: 'Coton bio 240g, coupe carrée. Logo blanc.',
+    tagline: 'Organic cotton, boxy fit. White GSD logo.',
+    material: '240 GSM organic cotton',
+    fit: 'Boxy',
     price: 3500,
     kind: 'tee',
     color: '#2f4a33',
@@ -81,7 +93,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-cap-black',
     name: 'GSD Cap',
     colorName: 'Black',
-    tagline: '6 panneaux, logo brodé, sangle réglable.',
+    tagline: '6-panel cap, embroidered logo, adjustable strap.',
+    material: 'Cotton twill',
+    fit: 'One size',
     price: 3000,
     kind: 'cap',
     color: '#151515',
@@ -92,7 +106,9 @@ export const PRODUCTS = Object.freeze([
     id: 'gsd-tee-purple',
     name: 'GSD Tee',
     colorName: 'Purple',
-    tagline: 'Coton bio 240g, coupe carrée. Logo blanc.',
+    tagline: 'Organic cotton, boxy fit. White GSD logo.',
+    material: '240 GSM organic cotton',
+    fit: 'Boxy',
     price: 3500,
     kind: 'tee',
     color: '#4a2f5e',
@@ -110,5 +126,5 @@ export function productTitle(product) {
 }
 
 export function formatPrice(cents) {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: CURRENCY }).format(cents / 100);
+  return new Intl.NumberFormat('en-IE', { style: 'currency', currency: CURRENCY }).format(cents / 100);
 }
