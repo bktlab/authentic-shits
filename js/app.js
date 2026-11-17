@@ -1,9 +1,9 @@
-import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=28';
-import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=28';
-import { productVisual } from './garment.js?v=28';
-import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_ENDS_AT } from './config.js?v=28';
-import { buildShopifyCheckoutUrl } from './shopify.js?v=28';
-import { initGate } from './gate.js?v=28';
+import { PRODUCTS, findProduct, formatPrice, productTitle } from './products.js?v=29';
+import { loadCart, saveCart, addItem, setQty, cartCount, cartTotal } from './cart.js?v=29';
+import { productVisual } from './garment.js?v=29';
+import { CHECKOUT_MODE, FREE_SHIPPING_FROM, SHIPPING_COST, DROP_STARTS_AT } from './config.js?v=29';
+import { buildShopifyCheckoutUrl } from './shopify.js?v=29';
+import { initGate } from './gate.js?v=29';
 
 const TOAST_MS = 2200;
 const TICK_MS = 1000;
@@ -251,15 +251,16 @@ function countdownParts(msLeft) {
 }
 
 function startCountdown() {
-  const end = Date.parse(DROP_ENDS_AT);
-  if (!DROP_ENDS_AT || Number.isNaN(end)) return; // pas de date : bandeau statique
+  const start = Date.parse(DROP_STARTS_AT);
+  if (!DROP_STARTS_AT || Number.isNaN(start)) return; // pas de date : bandeau statique
   const bar = $('[data-drop-bar]');
-  bar.innerHTML = 'Drop 01 closes in <span class="countdown" role="timer" aria-live="off"></span>';
+  if (start <= Date.now()) return; // drop ouvert : on garde « Drop 01 — out now »
+  bar.innerHTML = 'Drop 01 <span class="sep">—</span> 14.02 <span class="sep">—</span> in <span class="countdown" role="timer" aria-live="off"></span>';
   const box = bar.querySelector('.countdown');
   const tick = () => {
-    const msLeft = end - Date.now();
+    const msLeft = start - Date.now();
     if (msLeft <= 0) {
-      bar.textContent = 'Drop 01 is closed';
+      bar.innerHTML = 'Drop 01 <span class="sep">—</span> out now <span class="sep">—</span> no restock';
       clearInterval(timer);
       return;
     }
